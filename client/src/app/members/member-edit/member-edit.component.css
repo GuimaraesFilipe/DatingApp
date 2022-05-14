@@ -13,3 +13,9 @@
     border-top: none;
     background-color: #fff;
 }
+
+.save {
+    display: block;
+    width: 100%;
+    text-align: center;
+}
