@@ -1,4 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { ThrowStmt } from '@angular/compiler';
 import { Injectable } from '@angular/core';
 import { of } from 'rxjs';
 import { Observable } from 'rxjs';
@@ -45,4 +46,13 @@ export class MembersService {
       })
     )
   }
+
+  setMainPhoto(photoId: number){
+    return this.http.put(this.baseUrl +'users/set-main-photo/'+ photoId,{});
+  }
+
+  deletePhoto(photoId: number){
+    return this.http.delete(this.baseUrl +'users/delete-photo/'+ photoId,{});
+  }
+
 }
