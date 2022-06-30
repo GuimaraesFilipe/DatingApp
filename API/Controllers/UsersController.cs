@@ -56,10 +56,13 @@ namespace API.Controllers
         public async Task< ActionResult<MemberDto> > GetUser(string  username)
         {
 
-           return  await _unitOfWork.userRepository.GetMemberAsync(username);
-        
+           var currentUsername = User.GetUsername();
+            return await _unitOfWork.userRepository.GetMemberAsync(username,
+            isCurrentUser: currentUsername == username
+            );
 
-            
+
+
         }
         [HttpPut]
         public async Task<ActionResult> UpdateUser(MemberUpdateDTO memberUpdateDTO){
@@ -84,17 +87,12 @@ namespace API.Controllers
 
            if (result.Error != null) return BadRequest(result.Error.Message);
 
-           var photo= new Photo 
-           {
-               Url= result.SecureUrl.AbsoluteUri,
-               PublicId=result.PublicId
-           };
-
-           if (user.Photos.Count ==0)
-           {
-               photo.IsMain=true;
-           }
-           user.Photos.Add(photo);
+            var photo = new Photo
+            {
+                Url = result.SecureUrl.AbsoluteUri,
+                PublicId = result.PublicId
+            };
+            user.Photos.Add(photo);
 
            if (await _unitOfWork.Complete())
            {
@@ -133,7 +131,7 @@ namespace API.Controllers
 
         if(photo == null) return NotFound();
 
-        if (photo.IsMain) return BadRequest("YOu cannot delete your main photo");
+        if (photo.IsMain) return BadRequest("You cannot delete your main photo");
 
         if(photo.PublicId != null)
         {
